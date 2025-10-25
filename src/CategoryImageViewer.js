@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+console.log(process.env.REACT_APP_BACKEND_URL);
+
 function CategoryImageViewer() {
   const [categories, setCategories] = useState({});
   const [selectedCategory, setSelectedCategory] = useState("");
