@@ -20,7 +20,7 @@ function AdminDashboard() {
     const tempImages = {};
     for (const category of categories) {
       try {
-        const res = await fetch(`http://localhost:5000/images/${category}`);
+        const res = await fetch(`https://rk-backend-cxfa.onrender.com/api/getImages/${category}`);
         const data = await res.json();
         tempImages[category] = data;
       } catch (err) {

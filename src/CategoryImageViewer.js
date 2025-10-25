@@ -9,7 +9,8 @@ function CategoryImageViewer() {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/getImages");
+        const backendUrl = process.env.REACT_APP_BACKEND_URL;
+        const res = await fetch(`${backendUrl}/api/getImages`);;
         const data = await res.json();
 
         console.log("Fetched categories:", data);
