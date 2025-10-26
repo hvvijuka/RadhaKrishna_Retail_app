@@ -6,20 +6,15 @@ function CategoryImageUploader() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [newCategory, setNewCategory] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
-  const [moveTarget, setMoveTarget] = useState({});
 
   const CLOUD_NAME = "dqdkd2crn";
   const UPLOAD_PRESET = "radha-kanna-retail-app";
 
   // Load saved categories from localStorage
- useEffect(() => {
-  // 2️⃣ Load categories normally
-  const saved = JSON.parse(localStorage.getItem("categoriesData") || "{}");
-  //alert("🗂️ Saved categories object:\n\n" + JSON.stringify(saved, null, 2));
-  if (saved && Object.keys(saved).length) setCategories(saved);
-
-}, []);
-
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem("categoriesData") || "{}");
+    if (saved && Object.keys(saved).length) setCategories(saved);
+  }, []);
 
   // Set first category as selected
   useEffect(() => {
@@ -34,9 +29,6 @@ function CategoryImageUploader() {
     if (!categories[category]) {
       const updated = { ...categories, [category]: [] };
       setCategories(updated);
-      let messageBefore = ""
-    messageBefore = "addCategory"
-    alert(messageBefore);
       savePersistentCategories(updated);
     }
     setSelectedCategory(category);
@@ -70,9 +62,6 @@ function CategoryImageUploader() {
     updatedItems[index][field] = value;
     const updated = { ...categories, [category]: updatedItems };
     setCategories(updated);
-    let messageBefore = ""
-    messageBefore = "handleInputChange"
-    alert(messageBefore);
     savePersistentCategories(updated);
   };
 
@@ -82,9 +71,6 @@ function CategoryImageUploader() {
     updatedItems.splice(index, 1);
     const updated = { ...categories, [category]: updatedItems };
     setCategories(updated);
-    let messageBefore = ""
-    messageBefore = "handleDeleteImage"
-    alert(messageBefore);
     savePersistentCategories(updated);
     if (selectedImage === `${category}-${index}`) setSelectedImage(null);
   };
@@ -101,10 +87,8 @@ function CategoryImageUploader() {
       [toCategory]: toItems,
     };
     setCategories(updated);
-    let messageBefore = ""
-    messageBefore = "handleMoveImage"
-    alert(messageBefore);
     savePersistentCategories(updated);
+    setSelectedImage(null);
   };
 
   // Save only persistent fields to localStorage
@@ -151,9 +135,6 @@ function CategoryImageUploader() {
       }
 
       setCategories(updatedCategories);
-      let messageBefore = ""
-    messageBefore = "upload"
-    alert(messageBefore);
       savePersistentCategories(updatedCategories);
       alert("✅ Upload completed successfully!");
     } catch (err) {
@@ -328,6 +309,55 @@ function CategoryImageUploader() {
                         }}
                       />
                     </label>
+
+                    {/* Show buttons only if image is selected */}
+                    {isSelected && (
+                      <div style={{ marginTop: "10px", display: "flex", gap: "8px" }}>
+                        {/* Delete button */}
+                        <button
+                          onClick={() => handleDeleteImage(category, index)}
+                          style={{
+                            flex: 1,
+                            padding: "6px",
+                            backgroundColor: "#dc3545",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "6px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          🗑️ Delete
+                        </button>
+
+                        {/* Single Move button */}
+                        <button
+                          onClick={() => {
+                            const availableCategories = Object.keys(categories).filter(
+                              (cat) => cat !== category
+                            );
+                            if (availableCategories.length === 0)
+                              return alert("No other category available!");
+                            const target = prompt(
+                              "Enter target category to move this image:\nAvailable: " +
+                                availableCategories.join(", ")
+                            );
+                            if (!target || !availableCategories.includes(target)) return;
+                            handleMoveImage(category, index, target);
+                          }}
+                          style={{
+                            flex: 1,
+                            padding: "6px",
+                            backgroundColor: "#007BFF",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "6px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Move
+                        </button>
+                      </div>
+                    )}
                   </div>
                 );
               })}
