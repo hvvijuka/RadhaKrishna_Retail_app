@@ -13,6 +13,8 @@ function LoginPage() {
     }
 
     if (username.toLowerCase() === "admin") {
+      alert("Alert");
+      navigate("/admin");
       navigate("/upload"); // Admin goes to CategoryImageUploader
     } else {
       navigate("/view"); // Any other user goes to CategoryImageViewer
